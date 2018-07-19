@@ -9,12 +9,9 @@ AppConfig();
 
 EndPointConfig();
 
-
-
-
-
 // Configuring routing.
 function EndPointConfig(){
+
     app.use('/user', UserEndpoint);
 
     // Responds to homepage get request.
@@ -25,6 +22,7 @@ function EndPointConfig(){
 
 // App configuration.
 function AppConfig(){
+
     app.use(bodyParser.json());
 
     app.use(bodyParser.urlencoded({
