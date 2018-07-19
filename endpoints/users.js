@@ -54,7 +54,6 @@ function MongoConnect(callback){
     MongoClient.connect("mongodb://localhost:27017/db", function(err, client){
         
         callback(err, client);
-        
     });
 }
 
