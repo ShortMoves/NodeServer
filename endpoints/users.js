@@ -50,11 +50,4 @@ router.get('/', (req, res, next) => {
     });
 })
 
-/*
-function MongoConnect(callback){
-    mongoClient.connect("mongodb://localhost:27017/db", {useNewUrlParser: true}, function(err, client){
-        callback(err, client);
-    });
-}
-*/
 module.exports = router;

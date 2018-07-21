@@ -1,8 +1,8 @@
 var express = require("express"),
     app = express(),
     bodyParser = require('body-parser'),
-    userEndpoint = require('./endpoints/users');
-
+    userEndpoint = require('./endpoints/users'),
+    AuthController = require('./auth/AuthController');
     
 AppConfig();
 
@@ -12,6 +12,8 @@ EndPointConfig();
 function EndPointConfig(){
 
     app.use('/user', userEndpoint);
+
+    api.use('/api/auth', AuthController);
 
     // Responds to homepage get request.
     app.use('/', function(req, res){
