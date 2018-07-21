@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 //var mongoClient = require('mongodb').MongoClient;
-var bodyParser = require('body-parser');
 
 var mongoUtil = require('../utilities/mongoUtil');
 
@@ -16,8 +15,6 @@ mongoUtil.connectToServer((err) => {
 router.post('/', (req, res, next) => {
     
     console.log("POST ATTEMPTED")
-
-    
     
     var db = client.db("myDB");
     console.log(req.body);
@@ -50,9 +47,7 @@ router.get('/', (req, res, next) => {
             // Render items in view.
             res.send(items);
         })
-        db.close();
     });
-
 })
 
 /*

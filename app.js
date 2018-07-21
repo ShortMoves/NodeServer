@@ -1,6 +1,5 @@
 var express = require("express"),
     app = express(),
-    router = express.Router(),
     bodyParser = require('body-parser'),
     userEndpoint = require('./endpoints/users');
 
@@ -25,9 +24,7 @@ function AppConfig(){
 
     app.use(bodyParser.json());
 
-    app.use(bodyParser.urlencoded({
-        extended: false
-    }));
+    app.use(bodyParser.urlencoded({extended: true}));
 }
 
 module.exports = app;
