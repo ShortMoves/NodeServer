@@ -2,7 +2,7 @@ var express = require("express"),
     app = express(),
     router = express.Router(),
     bodyParser = require('body-parser'),
-    UserEndpoint = require('./endpoints/users');
+    userEndpoint = require('./endpoints/users');
 
     
 AppConfig();
@@ -12,7 +12,7 @@ EndPointConfig();
 // Configuring routing.
 function EndPointConfig(){
 
-    app.use('/user', UserEndpoint);
+    app.use('/user', userEndpoint);
 
     // Responds to homepage get request.
     app.use('/', function(req, res){
