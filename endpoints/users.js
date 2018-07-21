@@ -1,11 +1,11 @@
 const express = require('express');
-const router = express('router');
-var MongoClient = require('mongodb').MongoClient;
+const router = express.Router();
+var mongoClient = require('mongodb').MongoClient;
 var bodyParser = require('body-parser');
 
 
 
-router.post('/add', (req, res, next) => {
+router.post('/', (req, res, next) => {
     
     console.log("POST ATTEMPTED")
     MongoConnect((err, client) => {
@@ -51,8 +51,7 @@ router.get('/', (req, res, next) => {
 })
 
 function MongoConnect(callback){
-    MongoClient.connect("mongodb://localhost:27017/db", function(err, client){
-        
+    mongoClient.connect("mongodb://localhost:27017/db", {useNewUrlParser: true}, function(err, client){
         callback(err, client);
     });
 }
