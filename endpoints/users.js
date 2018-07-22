@@ -3,7 +3,7 @@ const router = express.Router();
 //var mongoClient = require('mongodb').MongoClient;
 
 var mongoUtil = require('../utilities/mongoUtil');
-
+var IsAuth = require('../auth/AuthController').IsAuth;
 
 mongoUtil.connectToServer((err) => {
     if (err) console.log(err);
@@ -12,7 +12,7 @@ mongoUtil.connectToServer((err) => {
 
 
 
-router.post('/', (req, res, next) => {
+router.post('/', IsAuth, (req, res, next) => {
     
     console.log("POST ATTEMPTED")
     
@@ -30,7 +30,7 @@ router.post('/', (req, res, next) => {
 })
 
 
-router.get('/', (req, res, next) => {
+router.get('/', IsAuth, (req, res, next) => {
     
     console.log("USER GET")
     var client = mongoUtil.getClient();
