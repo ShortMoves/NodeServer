@@ -13,7 +13,7 @@ function EndPointConfig(){
 
     app.use('/user', userEndpoint);
 
-    api.use('/api/auth', AuthController);
+    app.use('/api/auth', AuthController);
 
     // Responds to homepage get request.
     app.use('/', function(req, res){

@@ -1,41 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+var express = require('express')
+    router = express.Router(),
+    bodyParser = require('body-parser'),
+    mongoUtil = require('../utilities/mongoUtil'),
 
 router.use(bodyParser.urlencoded({ extended:false}))
 router.use(bodyParser.json());
 
-var User = require('../user')
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
 
 
-router.post('/register', function(req, res) {
-  
-    // Encrypt password.
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-    
-    // create user object with posted variables and hashed password
-    User.create({
-        
-      name : req.body.name,
-      email : req.body.email,
-      password : hashedPassword
-    },
-    // Function is called after user creation failed/worked.
-    function (err, user) {
-      if (err) return res.status(500).send("There was a problem registering the user.")
-      // Create a token if no error.
-      // jwt.sign() takes payload and secret key as parameters to encrypt.
-      var token = jwt.sign({ id: user._id }, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-      });
-      // Return positive auth and token.
-      res.status(200).send({ auth: true, token: token });
-    }); 
-  });
+
 
 router.get('/me', function(req, res) {
     // Default place for token is 'x-access-token' header.
@@ -51,6 +28,7 @@ router.get('/me', function(req, res) {
     });
 });
 
+/*
 router.post('/login', function(req, res) {
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
@@ -67,16 +45,16 @@ router.post('/login', function(req, res) {
         res.status(200).send({auth: true, token: token})
     })
 });
-
+*/
 module.exports = router;
-module.exports.IsAuth = (res, req, next) => {
+module.exports.IsAuth = (req, res, next) => {
     var token = req.headers['x-access-token'];
 
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
     jwt.verify(token, config.secret, function(err, decoded) {
         if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
         
-        res.status(200).send(decoded);
+        res.status(200);
         next();
     });
 }

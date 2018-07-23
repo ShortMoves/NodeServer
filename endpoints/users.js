@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 //var mongoClient = require('mongodb').MongoClient;
-
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+var config = require('../config');
 var mongoUtil = require('../utilities/mongoUtil');
 var IsAuth = require('../auth/AuthController').IsAuth;
 
@@ -10,7 +12,51 @@ mongoUtil.connectToServer((err) => {
     else console.log("Connected to server");
 })
 
+router.post('/register', function(req, res) {
+  
+    // Encrypt password.
+    var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
+    
+    // create user object with posted variables and hashed password
+    var User = {
+      name : req.body.Name,
+      email : req.body.Email,
+      password : hashedPassword
+    };
 
+    mongoUtil.AddUser(User, (err) => {
+        if (err) throw err;
+        var token = jwt.sign({ id: User._id }, config.secret, {
+            expiresIn: 86400 // expires in 24 hours
+            });
+            // Return positive auth and token.
+            res.status(200).send({ auth: true, token: token });
+            console.log("User Added to DB");
+    })
+});
+
+router.post('/login', function(req, res){
+
+    var Email = req.body.Email;
+    var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
+
+    mongoUtil.GetUser(req.body.Email, hashedPassword, (user, err) => {
+        if (err) throw err;
+
+        if (hashedPassword != user.password){
+            console.log("NO PASSWORD MATCH")
+            console.log(hashedPassword)
+            console.log(user.password)
+        }
+
+        var token = jwt.sign({ id: user._id }, config.secret, {
+            expiresIn: 86400 // expires in 24 hours
+            });
+            // Return positive auth and token.
+            res.status(200).send({ auth: true, token: token });
+    })
+
+});
 
 router.post('/', IsAuth, (req, res, next) => {
     
