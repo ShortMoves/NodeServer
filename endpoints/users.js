@@ -43,17 +43,17 @@ router.post('/login', function(req, res){
     mongoUtil.GetUser(req.body.Email, hashedPassword, (user, err) => {
         if (err) throw err;
 
-        if (hashedPassword != user.password){
-            console.log("NO PASSWORD MATCH")
-            console.log(hashedPassword)
-            console.log(user.password)
+        if (bcrypt.compare(req.body.Password, user.password)){
+            var token = jwt.sign({ id: user._id }, config.secret, {
+                expiresIn: 86400 // expires in 24 hours
+                });
+                // Return positive auth and token.
+                res.status(200).send({ auth: true, token: token });
         }
+        res.status(401).send();
+        
 
-        var token = jwt.sign({ id: user._id }, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
-            });
-            // Return positive auth and token.
-            res.status(200).send({ auth: true, token: token });
+        
     })
 
 });
